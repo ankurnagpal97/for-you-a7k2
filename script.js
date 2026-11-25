@@ -133,12 +133,15 @@ book.addEventListener('touchend', e => {
 });
 
 // ---------- music ----------
-const SONG_START = 43; // seconds: play from here to the end, then repeat from here
+const SONG_START = 65; // seconds: play from here to the end, then repeat from here
 let musicOn = true, started = false, firstPlay = true;
 song.addEventListener('ended', () => {
   song.currentTime = SONG_START;
   song.play().catch(() => {});
 });
+// Phones can ignore a seek made before the song has loaded, so enforce the start point whenever it's playing.
+const skipIntro = () => { if (song.currentTime < SONG_START - 0.5) song.currentTime = SONG_START; };
+['loadedmetadata', 'canplay', 'playing', 'timeupdate'].forEach(ev => song.addEventListener(ev, skipIntro));
 function fadeTo(vol, ms = 1500) {
   const from = song.volume, t0 = performance.now();
   (function step(t) {
@@ -151,7 +154,7 @@ function startMusic() {
   if (started || !musicOn) return;
   started = true;
   song.volume = 0;
-  if (firstPlay) { song.currentTime = SONG_START; firstPlay = false; }
+  if (firstPlay) { try { song.currentTime = SONG_START; } catch (e) {} firstPlay = false; }
   song.play().then(() => fadeTo(.7)).catch(() => { started = false; });
 }
 musicBtn.onclick = () => {
