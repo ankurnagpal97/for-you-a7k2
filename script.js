@@ -133,7 +133,7 @@ book.addEventListener('touchend', e => {
 });
 
 // ---------- music ----------
-const SONG_START = 65; // seconds: play from here to the end, then repeat from here
+const SONG_START = 75; // seconds: play from here to the end, then repeat from here
 let musicOn = true, started = false, firstPlay = true;
 song.addEventListener('ended', () => {
   song.currentTime = SONG_START;
