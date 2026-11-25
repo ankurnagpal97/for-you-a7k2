@@ -1,0 +1,196 @@
+:root {
+  --paper: #fbf5ec;
+  --paper-2: #f4ebdd;
+  --ink: #3b2a26;
+  --ink-soft: #7a625a;
+  --rose: #d64b63;
+  --pw: min(440px, 92vw);
+  --ph: min(700px, calc(100svh - 96px));
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(120% 90% at 50% 20%, #5a2a36 0%, #2d1520 55%, #1a0c13 100%);
+  color: var(--ink);
+  font-family: 'Fraunces', Georgia, serif;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+.glow {
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 80%, rgba(255,140,160,.12), transparent 40%),
+    radial-gradient(circle at 85% 15%, rgba(255,200,150,.10), transparent 40%);
+}
+
+.stage {
+  height: calc(100svh - 64px);
+  display: grid; place-items: center;
+  perspective: 2400px;
+}
+
+/* ---------- book ---------- */
+.book {
+  position: relative;
+  width: var(--pw); height: var(--ph);
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(.645,.045,.355,1);
+}
+@media (min-width: 980px) {
+  .book.open { transform: translateX(50%); }
+}
+
+.page {
+  position: absolute; inset: 0;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(.645,.045,.355,1);
+  cursor: pointer;
+}
+.page.flipped { transform: rotateY(-180deg); }
+
+.face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--paper);
+  border-radius: 4px 14px 14px 4px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,.35), inset 0 0 0 1px rgba(120,80,60,.08);
+  display: flex; flex-direction: column;
+}
+.face::after { /* spine shading */
+  content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 34px; pointer-events: none;
+  background: linear-gradient(90deg, rgba(90,50,30,.22), transparent);
+}
+.back { transform: rotateY(180deg); border-radius: 14px 4px 4px 14px; }
+.back::after { left: auto; right: 0; background: linear-gradient(270deg, rgba(90,50,30,.22), transparent); }
+
+/* ---------- cover ---------- */
+.cover {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.08), transparent 50%),
+    linear-gradient(160deg, #8e2f45, #5b1a2c);
+  color: #fbe9e3;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 28px;
+  gap: 8px;
+}
+.cover::before {
+  content: ''; position: absolute; inset: 14px; border: 1.5px solid rgba(255,220,200,.35); border-radius: 4px 10px 10px 4px; pointer-events: none;
+}
+.cover h1 { font-weight: 500; font-size: clamp(30px, 8vw, 42px); margin: 0; line-height: 1.05; letter-spacing: .5px; }
+.cover h1 em { font-style: italic; font-weight: 400; color: #ffc6cf; }
+.cover .sub { font-family: 'Caveat', cursive; font-size: clamp(20px, 5.5vw, 25px); opacity: .9; margin: 4px 0 6px; }
+.cover .tap { font-family: 'Caveat', cursive; font-size: 22px; margin-top: 10px; animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .45; transform: translateY(2px); } }
+
+.polaroid {
+  background: #fff; padding: 10px 10px 34px; border-radius: 3px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.35);
+  transform: rotate(-3deg); position: relative;
+  width: min(78%, 300px);
+}
+.polaroid img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.polaroid figcaption { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-family: 'Caveat', cursive; font-size: 20px; color: var(--ink); }
+.polaroid::before { /* tape */
+  content: ''; position: absolute; top: -12px; left: 50%; width: 90px; height: 24px; transform: translateX(-50%) rotate(2deg);
+  background: rgba(255,240,200,.75); box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+/* ---------- story pages ---------- */
+.art { flex: none; position: relative; }
+.art svg { display: block; width: 100%; height: auto; }
+.badge {
+  position: absolute; left: 14px; top: 14px;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: var(--paper); color: var(--rose);
+  display: grid; place-items: center; text-align: center; line-height: 1;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  font-weight: 700; font-size: 24px;
+}
+.badge small { display: block; font-size: 9px; letter-spacing: 1.5px; color: var(--ink-soft); font-weight: 500; margin-top: 2px; }
+.drift { animation: drift 3.5s ease-in-out infinite; transform-origin: 206px 64px; }
+@keyframes drift { 50% { transform: translateY(-6px) scale(1.06); } }
+
+.copy {
+  flex: 1; min-height: 0; overflow: auto;
+  padding: clamp(14px, 3.4vh, 24px) 26px 18px 34px;
+  display: flex; flex-direction: column;
+  background:
+    repeating-linear-gradient(transparent 0 31px, rgba(160,120,100,.08) 31px 32px);
+}
+.copy .when { font-family: 'Caveat', cursive; font-size: 21px; color: var(--rose); margin: 0; }
+.copy h2 { font-size: clamp(22px, 5.6vw, 27px); font-weight: 700; margin: 2px 0 8px; line-height: 1.15; }
+.copy p { font-size: clamp(15px, 3.9vw, 16.5px); line-height: 1.55; margin: 0; color: #4a3631; }
+.copy .refrain {
+  margin-top: auto; padding-top: 12px;
+  font-family: 'Caveat', cursive; font-size: 20px; color: var(--ink-soft);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.copy .refrain b { color: var(--rose); font-weight: 700; }
+
+/* ---------- backs ---------- */
+.back {
+  background: var(--paper-2);
+  align-items: center; justify-content: center; text-align: center; padding: 40px;
+}
+.back .note { font-family: 'Caveat', cursive; font-size: clamp(26px, 6.5vw, 32px); color: var(--ink-soft); line-height: 1.25; transform: rotate(-2deg); }
+.back .note span { color: var(--rose); }
+.back .doodle { font-size: 34px; margin-top: 14px; opacity: .8; }
+
+/* ---------- final page ---------- */
+.final {
+  align-items: center; justify-content: center; text-align: center; padding: 26px 24px;
+  background: radial-gradient(circle at 50% 0%, #fff6ef, var(--paper) 60%);
+  gap: 6px; cursor: default;
+}
+.final .polaroid { transform: rotate(2deg); width: min(72%, 270px); }
+.final h2 { font-size: clamp(24px, 6.5vw, 30px); margin: 16px 0 2px; line-height: 1.15; }
+.final p { margin: 0; font-size: clamp(15px, 3.9vw, 16.5px); line-height: 1.5; color: #4a3631; }
+.final .ask { font-family: 'Caveat', cursive; font-size: 28px; color: var(--rose); margin-top: 8px; }
+.answers { position: relative; display: flex; gap: 14px; justify-content: center; margin-top: 8px; min-height: 52px; width: 100%; }
+.answers button {
+  font: 600 17px 'Fraunces', serif; border: 0; border-radius: 999px; padding: 12px 26px; cursor: pointer;
+  transition: transform .25s, left .3s, top .3s;
+}
+#yes { background: var(--rose); color: #fff; box-shadow: 0 6px 18px rgba(214,75,99,.4); }
+#yes:hover { transform: scale(1.06); }
+#no { background: #ece1d4; color: var(--ink-soft); }
+.thanks { display: none; font-family: 'Caveat', cursive; font-size: 30px; color: var(--rose); line-height: 1.2; margin-top: 10px; }
+.forgiven .answers, .forgiven .ask { display: none; }
+.forgiven .thanks { display: block; animation: rise .8s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+
+/* ---------- controls ---------- */
+.controls {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 64px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding-bottom: env(safe-area-inset-bottom);
+  transition: opacity .6s;
+}
+.controls.hidden { opacity: 0; pointer-events: none; }
+.controls button {
+  width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,220,210,.3);
+  background: rgba(255,255,255,.06); color: #fbe3dc; font-size: 22px; cursor: pointer; line-height: 1;
+}
+.controls button:disabled { opacity: .3; cursor: default; }
+.controls .music { position: absolute; right: 16px; font-size: 18px; }
+.controls .music.off { text-decoration: line-through; opacity: .55; }
+.dots { display: flex; gap: 7px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,220,210,.3); transition: .3s; }
+.dots i.on { background: #ffb3c0; transform: scale(1.35); }
+
+/* floating hearts */
+.float-heart {
+  position: fixed; bottom: -40px; pointer-events: none; z-index: 99;
+  animation: floatUp linear forwards; color: #ff7a93;
+}
+@keyframes floatUp {
+  to { transform: translate(var(--dx), -115vh) rotate(var(--rot)); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page, .book { transition-duration: .01s; }
+  .drift, .cover .tap { animation: none; }
+}

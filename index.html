@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>A Little Book of Us</title>
+  <meta name="description" content="For you. I'm sorry.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+  <main class="stage">
+    <div class="book" id="book" aria-live="polite"></div>
+  </main>
+
+  <nav class="controls" aria-label="Book controls">
+    <button id="prev" aria-label="Previous page">‹</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" aria-label="Next page">›</button>
+    <button id="music" class="music" aria-label="Toggle music" title="Music">♪</button>
+  </nav>
+
+  <audio id="song" src="assets/song.mp3" preload="auto" loop></audio>
+
+  <script src="art.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
