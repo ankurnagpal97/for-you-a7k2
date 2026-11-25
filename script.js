@@ -133,7 +133,12 @@ book.addEventListener('touchend', e => {
 });
 
 // ---------- music ----------
-let musicOn = true, started = false;
+const SONG_START = 43; // seconds: play from here to the end, then repeat from here
+let musicOn = true, started = false, firstPlay = true;
+song.addEventListener('ended', () => {
+  song.currentTime = SONG_START;
+  song.play().catch(() => {});
+});
 function fadeTo(vol, ms = 1500) {
   const from = song.volume, t0 = performance.now();
   (function step(t) {
@@ -146,6 +151,7 @@ function startMusic() {
   if (started || !musicOn) return;
   started = true;
   song.volume = 0;
+  if (firstPlay) { song.currentTime = SONG_START; firstPlay = false; }
   song.play().then(() => fadeTo(.7)).catch(() => { started = false; });
 }
 musicBtn.onclick = () => {
